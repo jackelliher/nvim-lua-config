@@ -1,0 +1,53 @@
+
+# Neovim
+.netrwhist
+**/lazy-lock.json
+plugin/packer_compiled.lua
+
+# Database connection files and credentials
+.env
+connections.json
+dbui_*.txt
+dbui/connections.json
+.connections.json
+.db_connections.json
+
+# Language servers and tools
+.luarc.json
+.null-ls*
+
+# Mason installed tools
+mason/
+
+# Logs
+*.log
+log/
+logs/
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Local history
+.history/
+
+# Session files
+Session.vim
+Sessionx.vim
+
+# Tags
+tags
+tags.*
+.tags
+.tags.*
+
+# LSP data
+.lsp/
+.language-servers/
+
+# Cache directories
+.cache/
+cache/

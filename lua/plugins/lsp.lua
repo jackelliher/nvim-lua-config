@@ -65,26 +65,6 @@ return {
     },
   },
   {
-    "folke/neodev.nvim",
-    config = function()
-      require("neodev").setup({})
-    end,
-    ft = "lua",
-    priority = 100,
-    opts = {
-      -- Enable type information and completion for Neovim Lua API
-      library = {
-        enabled = true,
-        runtime = true,
-        types = true,
-        plugins = true,
-      },
-      setup_jsonls = true, -- Configure jsonls to get settings completion
-      lspconfig = true,    -- Configure lua-language-server for neovim config development
-      pathStrict = true,   -- Only load library for .nvim.lua files
-    },
-  },
-  {
     "L3MON4D3/LuaSnip",
     dependencies = {
       "rafamadriz/friendly-snippets",
@@ -105,12 +85,7 @@ return {
       end)
     end
   },
-  {
-    "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup {}
-    end
-  },
+  "williamboman/mason.nvim",
   {
     "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
@@ -126,6 +101,7 @@ return {
           "stylua"
         },
         handlers = {},
+        automatic_installation = true,
       })
 
       local null_ls = require("null-ls")
@@ -140,8 +116,19 @@ return {
   {
     "williamboman/mason-lspconfig.nvim",
     config = function()
-      local mslp = require("mason-lspconfig")
-      mslp.setup {
+      require("mason-lspconfig")
+    end
+  },
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      local lspconfig = require('lspconfig')
+      local mason = require('mason')
+      local masonlsp = require('mason-lspconfig')
+
+      mason.setup()
+      masonlsp.setup {
+        automatic_installation = true,
         ensure_installed = {
           "cssls",
           "tailwindcss",
@@ -150,17 +137,21 @@ return {
           "ts_ls",
         }
       }
-      mslp.setup_handlers({
+
+      masonlsp.setup_handlers({
         function(server_name)
-          require("lspconfig")[server_name].setup {}
+          require("lspconfig")[server_name].setup {
+            capabilities = require('cmp_nvim_lsp').default_capabilities(),
+            -- Default keymaps for all servers
+            on_attach = function(_, bufnr)
+              vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { buffer = bufnr })
+              vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
+              vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = bufnr })
+            end
+          }
         end
       })
-    end
-  },
-  {
-    "neovim/nvim-lspconfig",
-    config = function()
-      local lspconfig = require('lspconfig')
+
       lspconfig.lua_ls.setup({
         settings = {
           Lua = {
@@ -185,16 +176,25 @@ return {
         },
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
       })
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover)
-      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename)
-      vim.keymap.set({ 'v', 'n' }, '<leader>f', vim.lsp.buf.format)
-      vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
-      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-      vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-      vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action)
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover)
-      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help)
+
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      lspconfig.ts_ls.setup({
+        capabilities = capabilities,
+      })
+
+      -- Keymaps
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'Rename symbol under cursor' })
+      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
+      vim.keymap.set('n', 'gr', vim.lsp.buf.references, { desc = 'Show references' })
+      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Show hover documentation' })
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'Rename symbol under cursor' })
+      vim.keymap.set({ 'v', 'n' }, '<leader>f', vim.lsp.buf.format, { desc = 'Format document' })
+      vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { desc = 'Show diagnostics in floating window' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, { desc = 'Show code actions' })
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Show hover documentation' })
+      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { desc = 'Show signature help' })
     end
   }
 }

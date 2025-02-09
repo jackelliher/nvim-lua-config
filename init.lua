@@ -37,8 +37,8 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 2
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
 
 vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
@@ -73,6 +73,8 @@ vim.api.nvim_create_autocmd("BufEnter", {
 })
 
 -- file paths
-vim.keymap.set('n', '<leader>ep', ':Oil ~/.config/nvim/lua/plugins<CR>')
 vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<CR>')
 
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
+
+vim.keymap.set('v', 'gx', '!open<CR>')
