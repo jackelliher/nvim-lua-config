@@ -65,6 +65,16 @@ vim.keymap.set('n', '<leader>H', ':split<CR>', { desc = 'Horizontal terminal spl
 vim.keymap.set('n', '<leader>vt', ':vsplit term://bash<CR>', { desc = 'Vertical terminal split' })
 vim.keymap.set('n', '<leader>ht', ':split term://bash<CR>', { desc = 'Horizontal terminal split' })
 vim.keymap.set('n', '<leader>cd', ':cd %:p:h<CR>', { desc = 'Change directory to current buffer parent' })
+vim.keymap.set('n', '<C-S-o>', ':bprevious<CR>', { desc = 'Explore buffer history, last buffer, etc.' })
+vim.keymap.set('n', '<C-S-i>', ':bnext<CR>', { desc = 'Explore buffer history, next buffer, etc.' })
+vim.keymap.set('n', '<leader>d<leader>', ':%s/\\v^ +$//g<CR>', { desc = 'Delete all whitespace lines' })
+vim.keymap.set('v', '<leader>el', ":lua<CR>", { desc = 'Execute selected lua text' })
+vim.keymap.set('t', '<ESC><ESC>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.api.nvim_create_user_command('TermHere', function()
+  local file_dir = vim.fn.expand('%:p:h')
+  vim.cmd('terminal cd ' .. file_dir .. ' && $SHELL')
+end, {})
+vim.keymap.set('n', '<leader>th', ':TermHere<CR>', { desc = 'Open terminal in current file directory' })
 
 -- Auto enter normal mode when terminal buffer gets focus
 vim.api.nvim_create_autocmd("BufEnter", {

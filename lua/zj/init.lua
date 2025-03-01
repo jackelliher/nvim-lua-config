@@ -65,7 +65,6 @@ function M.grep_notes()
 end
 
 function M.setup()
-  -- Create keybindings
   vim.keymap.set("n", "<leader>jz", M.create_note, { desc = "Create new note" })
   vim.keymap.set("n", "<leader>js", M.search_note, { desc = "Search notes" })
   vim.keymap.set("n", "<leader>jg", M.grep_notes, { desc = "Grep notes" })

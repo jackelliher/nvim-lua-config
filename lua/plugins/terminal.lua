@@ -54,6 +54,16 @@ return {
         term:toggle()
       end, { desc = "Toggle terminal" })
 
+      local claudeTerm = Terminal:new({
+        cmd = "bash --rcfile ~/.bashrc -i -c 'source ~/.bashrc && claude'",
+        direction = "float",
+        hidden = true
+      })
+
+      vim.keymap.set("n", "<leader>cla", function()
+        claudeTerm:toggle()
+      end, { desc = "Toggle terminal" })
+
       -- Define the terminal instance
       local yipyapCli = Terminal:new({
         cmd = "bash --rcfile ~/.bashrc -i -c 'source ~/.bashrc && yipyap'",
