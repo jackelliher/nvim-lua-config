@@ -64,6 +64,26 @@ return {
         claudeTerm:toggle()
       end, { desc = "Toggle terminal" })
 
+      local telegram = Terminal:new({
+        cmd = "bash --rcfile ~/.bashrc -i -c 'source ~/.bashrc && tgt'",
+        direction = "float",
+        hidden = true
+      })
+
+      vim.keymap.set("n", "<leader>tgt", function()
+        telegram:toggle()
+      end, { desc = "Toggle terminal" })
+
+      local htop = Terminal:new({
+        cmd = "bash --rcfile ~/.bashrc -i -c 'source ~/.bashrc && htop'",
+        direction = "float",
+        hidden = true
+      })
+
+      vim.keymap.set("n", "<leader>htop", function()
+        htop:toggle()
+      end, { desc = "Toggle terminal" })
+
       -- Define the terminal instance
       local yipyapCli = Terminal:new({
         cmd = "bash --rcfile ~/.bashrc -i -c 'source ~/.bashrc && yipyap'",

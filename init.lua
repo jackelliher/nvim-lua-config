@@ -21,6 +21,8 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.g.netrw_bufsettings = 'noma nomod nu rnu nobl nowrap ro'
+vim.wo.wrap = false
+
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
@@ -36,7 +38,7 @@ require("lazy").setup({
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.expandtab = true
-vim.opt.shiftwidth = 2
+vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 
@@ -68,13 +70,21 @@ vim.keymap.set('n', '<leader>cd', ':cd %:p:h<CR>', { desc = 'Change directory to
 vim.keymap.set('n', '<C-S-o>', ':bprevious<CR>', { desc = 'Explore buffer history, last buffer, etc.' })
 vim.keymap.set('n', '<C-S-i>', ':bnext<CR>', { desc = 'Explore buffer history, next buffer, etc.' })
 vim.keymap.set('n', '<leader>d<leader>', ':%s/\\v^ +$//g<CR>', { desc = 'Delete all whitespace lines' })
+vim.keymap.set('n', '<leader>th', ':TermHere<CR>', { desc = 'Open terminal in current file directory' })
+
+-- file paths
+vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<CR>')
+vim.keymap.set('n', '<leader>src', ':Oil ~/Source/<CR>')
+
 vim.keymap.set('v', '<leader>el', ":lua<CR>", { desc = 'Execute selected lua text' })
+vim.keymap.set('v', 'gx', '!open<CR>')
+
 vim.keymap.set('t', '<ESC><ESC>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
 vim.api.nvim_create_user_command('TermHere', function()
   local file_dir = vim.fn.expand('%:p:h')
   vim.cmd('terminal cd ' .. file_dir .. ' && $SHELL')
 end, {})
-vim.keymap.set('n', '<leader>th', ':TermHere<CR>', { desc = 'Open terminal in current file directory' })
 
 -- Auto enter normal mode when terminal buffer gets focus
 vim.api.nvim_create_autocmd("BufEnter", {
@@ -82,9 +92,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
   command = "stopinsert"
 })
 
--- file paths
-vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<CR>')
+vim.api.nvim_create_user_command('DelSwap', function()
+  vim.fn.delete(vim.fn.expand("~/.local/state/nvim/swap/*.swp"))
+end, {})
 
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 
-vim.keymap.set('v', 'gx', '!open<CR>')

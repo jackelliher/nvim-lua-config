@@ -22,6 +22,7 @@ return {
     vim.keymap.set('n', '<leader>fig', function()
       local current_file_dir = vim.fn.expand('%:p:h')
       require('telescope.builtin').live_grep({
+        prompt_title = "Grep in current buffer's working directory",
         cwd = current_file_dir,
       })
     end)
